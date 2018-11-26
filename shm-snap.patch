@@ -1,0 +1,56 @@
+diff --git a/sysdeps/unix/sysv/linux/shm-directory.c b/sysdeps/unix/sysv/linux/shm-directory.c
+index 222b6e6..34a7660 100644
+--- a/sysdeps/unix/sysv/linux/shm-directory.c
++++ b/sysdeps/unix/sysv/linux/shm-directory.c
+@@ -58,6 +58,51 @@ where_is_shmfs (void)
+                                          || f.f_type == RAMFS_MAGIC))
+     {
+       /* It is in the normal place.  */
++      /* check if this is snappy system, and we should use sub dir */
++      const char *snap_sub_dir = getenv ("SNAP_SHM_SUB_DIR");
++      if (snap_sub_dir != NULL)
++      {
++        /* make sure sub dir exists and is usable */
++        mountpoint.dir = (char *) malloc (sizeof (defaultdir) + 1 + strlen(snap_sub_dir));
++        if (mountpoint.dir != NULL)
++          {
++            char *cp = __mempcpy (mountpoint.dir, defaultdir, strlen(defaultdir));
++            if (cp[-1] != '/')
++              *cp++ = '/';
++            cp = __mempcpy (cp, snap_sub_dir , strlen(snap_sub_dir));
++            if (cp[-1] != '/')
++              *cp++ = '/';
++            *cp = '\0';
++            mountpoint.dirlen = cp - mountpoint.dir;
++            /* make sure directory exists */
++            int st = mkdir(mountpoint.dir, 0777);
++            if (st == 0 || st == EEXIST)
++            {
++              return;
++            }
++            else
++            {
++              free (mountpoint.dir);
++              mountpoint.dir = NULL;
++            }
++          }
++      }
++      const char *snap_prefix = getenv ("SNAP_SHM_PREFIX");
++      if (snap_prefix != NULL)
++      {
++        mountpoint.dir = (char *) malloc (sizeof (defaultdir) + 1 + strlen(snap_prefix));
++        if (mountpoint.dir != NULL)
++          {
++            char *cp = __mempcpy (mountpoint.dir, defaultdir, strlen(defaultdir));
++            if (cp[-1] != '/')
++              *cp++ = '/';
++            cp = __mempcpy (cp, snap_prefix , strlen(snap_prefix));
++            *cp = '\0';
++            mountpoint.dirlen = cp - mountpoint.dir;
++
++            return;
++        }
++      }
+       mountpoint.dir = (char *) defaultdir;
+       mountpoint.dirlen = sizeof (defaultdir) - 1;
+ 
