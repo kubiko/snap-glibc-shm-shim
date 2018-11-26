@@ -1,0 +1,10 @@
+
+# Mac
+.DS_Store
+
+**/snap/.snapcraft
+**/parts/
+**/stage
+**/prime
+**/*.snap
+**/*.tar*
