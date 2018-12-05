@@ -12,11 +12,13 @@ architectures:
     - build-on: i386
     - build-on: amd64
 
+base: core18
+
 parts:
     libpthread:
         plugin: nil
         source: https://git.launchpad.net/ubuntu/+source/glibc
-        source-tag: ubuntu/xenial-updates
+        source-tag: ubuntu/bionic
         source-type: git
         build-packages:
             - rdfind
@@ -27,6 +29,8 @@ parts:
             - wget
             - quilt
             - gawk
+            - debhelper
+            - bison
         override-pull: |
             snapcraftctl pull
             snapcraftctl set-version $(git describe 2>/dev/null | awk -F '/' '{print $3}')
@@ -46,4 +50,5 @@ parts:
             make install -j$(nproc)
             cd ../../
             find lib -name 'libpthread*.so*' -exec cp --parents \{\} ${SNAPCRAFT_PART_INSTALL} \;
-        build-attributes: [ no-system-libraries, ]
+        build-attributes:
+            - no-patchelf
