@@ -1,7 +1,7 @@
 name: libc-shm-shim
-summary: glibs snap shim to redirect used sharem memory into snap permited sub dir
+summary: glibc snap shim to redirect used sharem memory into snap permited sub dir
 description: |
-   glibs snap shim to redirect used sharem memory into snap permited sub dir
+   glibc snap shim to redirect used sharem memory into snap permited sub dir
 
 confinement: strict
 grade: stable
