@@ -18,7 +18,7 @@ parts:
     libpthread:
         plugin: nil
         source: https://git.launchpad.net/ubuntu/+source/glibc
-        source-tag: ubuntu/bionic
+        source-tag: ubuntu/bionic-updates
         source-type: git
         override-pull: |
             snapcraftctl pull
