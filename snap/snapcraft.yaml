@@ -12,13 +12,13 @@ architectures:
     - build-on: i386
     - build-on: amd64
 
-base: core18
+base: core
 
 parts:
     libpthread:
         plugin: nil
         source: https://git.launchpad.net/ubuntu/+source/glibc
-        source-tag: ubuntu/bionic-updates
+        source-tag: ubuntu/xenial-updates
         source-type: git
         override-pull: |
             snapcraftctl pull
